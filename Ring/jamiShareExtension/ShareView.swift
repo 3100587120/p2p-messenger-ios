@@ -505,11 +505,15 @@ struct ShareButtonBackground: View {
 
 private struct HiddenBottomScrollEdgeEffect: ViewModifier {
     func body(content: Content) -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             content.scrollEdgeEffectHidden(true, for: .bottom)
         } else {
             content
         }
+#else
+        content
+#endif
     }
 }
 

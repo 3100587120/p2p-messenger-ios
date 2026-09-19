@@ -241,11 +241,15 @@ extension View {
 
     @ViewBuilder
     func hidingTopScrollEdgeEffect() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             self.scrollEdgeEffectHidden(true, for: .top)
         } else {
             self
         }
+#else
+        self
+#endif
     }
 }
 
