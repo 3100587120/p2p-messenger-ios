@@ -97,7 +97,7 @@ do
 
   SDKROOT=`xcode-select -print-path`/Platforms/${IOS_TARGET_PLATFORM}.platform/Developer/SDKs/${IOS_TARGET_PLATFORM}${SDK_VERSION}.sdk
 
-  SDK="`echo "print '${IOS_TARGET_PLATFORM}'.lower()" | python`"
+  SDK="$(printf '%s' "$IOS_TARGET_PLATFORM" | tr '[:upper:]' '[:lower:]')"
 
   CC="xcrun -sdk $SDK clang"
   CXX="xcrun -sdk $SDK clang++"
