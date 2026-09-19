@@ -445,6 +445,7 @@ private struct GlassModifier<S: Shape>: ViewModifier {
     var interactive: Bool = false
 
     func body(content: Content) -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             content
                 .glassEffect(
@@ -466,6 +467,25 @@ private struct GlassModifier<S: Shape>: ViewModifier {
                 )
                 .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 6)
         }
+#else
+        legacyBody(content: content)
+#endif
+    }
+
+    private func legacyBody(content: Content) -> some View {
+        content
+            .background(
+                ZStack {
+                    VisualEffect(style: .systemUltraThinMaterial, withVibrancy: false)
+                    Color.white.opacity(0.08)
+                }
+                .clipShape(shape)
+            )
+            .overlay(
+                shape
+                    .stroke(Color.white.opacity(0.25), lineWidth: 0.5)
+            )
+            .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 6)
     }
 }
 

@@ -165,6 +165,7 @@ struct MessagePanelView: View {
     private func moreActionsButton() -> some View {
         Menu(content: menuContent, label: {
             Group {
+#if compiler(>=6.2)
                 if #available(iOS 26.0, *) {
                     Image(systemName: "plus")
                         .font(.system(size: 22, weight: .light))
@@ -182,6 +183,9 @@ struct MessagePanelView: View {
                     .clipShape(Circle())
                     .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
                 }
+#else
+                legacyMoreActionsButtonLabel
+#endif
             }
         })
         .accessibilityLabel(L10n.Accessibility.conversationShareMedia)
@@ -212,6 +216,7 @@ struct MessagePanelView: View {
 
         let cornerRadius = defaultControlSize / 2
 
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             hstack
                 .glassEffect(in: .rect(cornerRadius: cornerRadius))
@@ -223,6 +228,31 @@ struct MessagePanelView: View {
                 )
                 .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
         }
+#else
+        legacyMessageTextField(hstack, cornerRadius: cornerRadius)
+#endif
+    }
+
+    private var legacyMoreActionsButtonLabel: some View {
+        ZStack {
+            VisualEffect(style: .systemUltraThinMaterial, withVibrancy: false)
+            Image(systemName: "plus")
+                .font(.system(size: 22, weight: .light))
+                .foregroundColor(model.styling.secondaryTextColor)
+        }
+        .frame(width: defaultControlSize, height: defaultControlSize)
+        .clipShape(Circle())
+        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
+    }
+
+    private func legacyMessageTextField<Content: View>(_ content: Content,
+                                                        cornerRadius: CGFloat) -> some View {
+        content
+            .background(
+                VisualEffect(style: .systemUltraThinMaterial, withVibrancy: false)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 1)
     }
 
     @ViewBuilder
