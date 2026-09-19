@@ -232,11 +232,15 @@ extension View {
 
     @ViewBuilder
     func optionalFullWidthListSection() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             self.listSectionMargins(.horizontal, 0)
         } else {
             self
         }
+#else
+        self
+#endif
     }
 
     @ViewBuilder
