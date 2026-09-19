@@ -1,3 +1,3 @@
 [submodule "daemon"]
 	path = daemon
-	url = https://review.jami.net/jami-daemon
+	url = https://github.com/3100587120/p2p-messenger-daemon.git
